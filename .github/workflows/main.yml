@@ -69,31 +69,31 @@ jobs:
         id: download_BH_Plus
         run: |
           # Direct .deb release asset URL (hardcoded). Update version if you release a new one.
-          deb_url="https://github.com/al3raQe/Twitter_Galaxy/releases/download/GX_HD/com.den.twigalaxy_1.13_iphoneos-arm64.deb"
+          deb_url="https://github.com/al3raQe/BHTwitter/releases/download/BHTwitter/com.bandarhl.bhtwitter_4.4-1+debug_iphoneos-arm64.deb"
           echo "Downloading: $deb_url"
-          wget "$deb_url" --no-verbose -O "${{ github.workspace }}/TwiGalaxy.deb"
+          wget "$deb_url" --no-verbose -O "${{ github.workspace }}/BHTwitter.deb"
 
           # Set tag variable used later in filenames (keep consistent name)
-          echo "GX_HD_TAG=Galaxy_1.13_By_al3raQe" >> $GITHUB_ENV
+          echo "BHTwitter_TAG=BHTwitter_4.4.1_By_al3raQe" >> $GITHUB_ENV
 
       - name: Inject tweaks into IPA
         run: |
-          cyan -i Twitter.ipa -o GX_HD_${{ env.GX_HD_TAG }}.ipa -uwef TwiGalaxy.deb -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }} -s
+          cyan -i Twitter.ipa -o BHTwitter_${{ env.BHTwitter_TAG }}.ipa -uwef BHTwitter.deb -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }} -s
 
       - name: Strip embedded Swift dylibs
         run: |
-          unzip -q GX_HD_${{ env.GX_HD_TAG }}.ipa -d tmp_payload
+          unzip -q BHTwitter_${{ env.BHTwitter_TAG }}.ipa -d tmp_payload
           find tmp_payload/Payload/*.app/ -name "libswift*.dylib" -print -delete
           cd tmp_payload
-          zip -qr ../GX_HD_${{ env.GX_HD_TAG }}_clean.ipa Payload
+          zip -qr ../BHTwitter_${{ env.BHTwitter_TAG }}_clean.ipa Payload
           cd ..
-          mv GX_HD_${{ env.GX_HD_TAG }}_clean.ipa GX_HD_${{ env.GX_HD_TAG }}.ipa
+          mv GX_HD_${{ env.BHTwitter_TAG }}_clean.ipa BHTwitter_${{ env.BHTwitter_TAG }}.ipa
 
       - uses: softprops/action-gh-release@v2.0.1
         with:
-          tag_name: GX_HD-${{ env.GX_HD_TAG }}
-          name: GX_HD ${{ env.GX_HD_TAG }}
-          files: GX_HD_${{ env.GX_HD_TAG }}.ipa
+          tag_name: BHTwitter-${{ env.BHTwitter_TAG }}
+          name: BHTwitter ${{ env.BHTwitter_TAG }}
+          files: BHTwitter_${{ env.BHTwitter_TAG }}.ipa
           draft: true
 
       - name: Output Release URL
